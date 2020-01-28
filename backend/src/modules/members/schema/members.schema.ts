@@ -4,7 +4,14 @@
 
 import * as mongoose from 'mongoose';
 
-export const MembersSchema = new mongoose.Schema({
-  name: String,
-  age: Number,
-});
+export const MembersSchema = new mongoose.Schema(
+  {
+    hn: { type: String, required: true },
+    name: { type: String, required: true },
+    address: String,
+    birtdate: Date,
+    disease: String,
+    allegric: String,
+  },
+  { timestamps: { createdAt: 'createdAt' } },
+);

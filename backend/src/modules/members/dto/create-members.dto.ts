@@ -6,7 +6,11 @@
  * A data transfer object
  */
 export class CreateMembersDTO {
+  readonly hn: string;
   readonly name: string;
-  readonly age: number;
+  readonly address: string;
+  readonly birtdate: Date;
+  readonly disease: string;
+  readonly allegric: string;
   // more fields at this point
 }

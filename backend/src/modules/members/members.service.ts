@@ -30,12 +30,37 @@ export class MembersService {
   /**
    * Example of saving db
    */
-  async create(createMembersDto: CreateMembersDTO): Promise<Members> {
+  create(createMembersDto: CreateMembersDTO): Promise<Members> {
     const createdMembers = new this.membersModel(createMembersDto);
-    return await createdMembers.save();
+    return createdMembers.save();
   }
 
-  async findAll(): Promise<Members[]> {
-    return await this.membersModel.find().exec();
+  findAll(): Promise<Members[]> {
+    return this.membersModel.find().exec();
+  }
+
+  findOne(hn: string): Promise<Members> {
+    return this.membersModel.findOne({ hn }).exec();
+  }
+
+  async update(
+    hn: string,
+    createMembersDto: CreateMembersDTO,
+  ): Promise<Members> {
+    const update = await this.membersModel
+      .findOneAndUpdate({ hn }, createMembersDto)
+      .exec();
+
+    if (update) {
+      return await this.findOne(hn);
+    }
+  }
+
+  delete(hn: string): Promise<Object> {
+    return this.membersModel.deleteOne({ hn });
+  }
+
+  countAll(): Promise<Number> {
+    return this.membersModel.estimatedDocumentCount();
   }
 }

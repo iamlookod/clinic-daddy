@@ -20,7 +20,7 @@ describe('MembersController', () => {
 
   describe('root', () => {
     it('should return object is instance of "ReadMembersDTO!"', () => {
-      const readMembersDTO = membersController.getMembers();
+      const readMembersDTO = membersController.findAll();
       expect(readMembersDTO).toBeInstanceOf(ReadMembersDTO);
     });
   });
