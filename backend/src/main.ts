@@ -13,14 +13,15 @@ import { AppModules } from './app.module';
 
 async function bootstrap() {
   // create a microservices
-  const microApp = await NestFactory.create(AppModules);
-  microApp.connectMicroservice({
+  const app = await NestFactory.create(AppModules);
+  app.connectMicroservice({
     transport: Transport.TCP,
     options: { retryAttempts: 5, retryDelay: 3001 },
   });
 
-  await microApp.startAllMicroservicesAsync();
-  await microApp.listen(3001);
+  app.enableCors();
+  await app.startAllMicroservicesAsync();
+  await app.listen(3001);
 
   /**
    * Below code is REST APIs with fastify

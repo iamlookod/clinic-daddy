@@ -5,6 +5,10 @@
 import { Document } from 'mongoose';
 
 export interface Members extends Document {
+  readonly hn: string;
   readonly name: string;
-  readonly age: number;
+  readonly address: string;
+  readonly birtdate: Date;
+  readonly disease: string;
+  readonly allegric: string;
 }
