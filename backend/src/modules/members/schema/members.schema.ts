@@ -3,6 +3,7 @@
  */
 
 import * as mongoose from 'mongoose';
+import * as mongoosePaginate from 'mongoose-paginate-v2';
 
 export const MembersSchema = new mongoose.Schema(
   {
@@ -14,4 +15,4 @@ export const MembersSchema = new mongoose.Schema(
     allegric: String,
   },
   { timestamps: { createdAt: 'createdAt' } },
-);
+).plugin(mongoosePaginate);

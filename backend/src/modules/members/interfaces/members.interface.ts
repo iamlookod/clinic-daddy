@@ -12,3 +12,10 @@ export interface Members extends Document {
   readonly disease: string;
   readonly allegric: string;
 }
+
+// export interface Query {
+//   sort: {
+//     field: string;
+//     orderBy: 'asc' | 'desc';
+//   };
+// }

@@ -36,6 +36,13 @@ export class MembersController {
     });
   }
 
+  @Post('/datatable')
+  async datatable(@Body() req) {
+    return await this.membersService.getMembers(req).catch(err => {
+      throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    });
+  }
+
   @Get(':hn')
   async findOne(@Param('hn') hn: string): Promise<Members> {
     return await this.membersService.findOne(hn.toUpperCase()).catch(err => {
@@ -45,11 +52,16 @@ export class MembersController {
 
   @Post()
   async create(@Body() createMembersDTO: CreateMembersDTO): Promise<Members> {
-    const countMembers = await this.membersService.countAll();
+    const lastestMembers = await this.membersService.lastest();
+    const hn = `HN-${padStart(
+      Number(lastestMembers.hn.split('-')[1]) + 1,
+      6,
+      0,
+    )}`;
 
     return await this.membersService
       .create({
-        hn: `HN-${padStart(Number(countMembers) + 1, 6, 0)}`,
+        hn,
         ...createMembersDTO,
       })
       .catch(err => {

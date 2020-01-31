@@ -21,10 +21,30 @@ export class MembersService {
   /**
    * Return a ReadMembersDTO object
    */
-  getMembers(): ReadMembersDTO {
-    // Any business logic requires
-    const readMembersDTO = new ReadMembersDTO();
-    return readMembersDTO;
+  async getMembers(req) {
+    let query = {};
+    let options = {};
+    if (req.sort)
+      options = {
+        ...options,
+        sort: { [req.sort.field]: req.sort.orderBy },
+      };
+
+    if (req.limit) options = { ...options, limit: req.limit };
+    if (req.offset) options = { ...options, offset: req.offset };
+
+    if (req.search)
+      query = {
+        $or: [
+          { name: { $regex: `.*${req.search}.*` } },
+          { hn: { $regex: `.*${req.search.toUpperCase()}.*` } },
+        ],
+      };
+
+    const data = await this.membersModel.paginate(query, options);
+
+    console.log(data);
+    return data;
   }
 
   /**
@@ -60,7 +80,9 @@ export class MembersService {
     return this.membersModel.deleteOne({ hn });
   }
 
-  countAll(): Promise<Number> {
-    return this.membersModel.estimatedDocumentCount();
+  async lastest(): Promise<Members> {
+    return await this.membersModel
+      .findOne({}, {}, { sort: { createdAt: -1 } })
+      .exec();
   }
 }
