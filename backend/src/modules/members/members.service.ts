@@ -4,7 +4,7 @@
 
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
-import { ReadMembersDTO } from './dto/read-members.dto';
+// import { ReadMembersDTO } from './dto/read-members.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Members } from './interfaces/members.interface';
 import { CreateMembersDTO } from './dto/create-members.dto';

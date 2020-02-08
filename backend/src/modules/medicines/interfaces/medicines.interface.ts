@@ -6,5 +6,6 @@ import { Document } from 'mongoose';
 
 export interface Medicines extends Document {
   readonly name: string;
-  readonly age: number;
+  readonly type: string;
+  readonly description: string;
 }

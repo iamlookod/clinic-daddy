@@ -7,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { MembersModule } from './modules/members/members.module';
 import { MembersDetailModule } from './modules/members-detail/members-detail.module';
+import { MedicinesModule } from './modules/medicines/medicines.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { MembersDetailModule } from './modules/members-detail/members-detail.mod
     }),
     MembersModule,
     MembersDetailModule,
+    MedicinesModule,
   ],
   controllers: [],
   providers: [],

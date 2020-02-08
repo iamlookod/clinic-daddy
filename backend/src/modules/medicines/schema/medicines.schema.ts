@@ -3,8 +3,13 @@
  */
 
 import * as mongoose from 'mongoose';
+import * as mongoosePaginate from 'mongoose-paginate-v2';
 
-export const MedicinesSchema = new mongoose.Schema({
-  name: String,
-  age: Number,
-});
+export const MedicinesSchema = new mongoose.Schema(
+  {
+    name: String,
+    type: String,
+    description: String,
+  },
+  { timestamps: { createdAt: 'createdAt' } },
+).plugin(mongoosePaginate);
