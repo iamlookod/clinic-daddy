@@ -6,11 +6,10 @@ import { Document } from 'mongoose';
 
 export interface MembersDetail extends Document {
   readonly hn: string;
-  readonly name: string;
-  readonly address: string;
-  readonly birtdate: Date;
-  readonly disease: string;
-  readonly allegric: string;
+  readonly symb: string;
+  readonly diag: string;
+  readonly medicine: Array<string>;
+  readonly price: number;
 }
 
 // export interface Query {

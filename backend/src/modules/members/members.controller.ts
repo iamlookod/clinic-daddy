@@ -38,7 +38,7 @@ export class MembersController {
 
   @Post('/datatable')
   async datatable(@Body() req) {
-    return await this.membersService.getMembers(req).catch(err => {
+    return await this.membersService.datatable(req).catch(err => {
       throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
     });
   }
@@ -53,7 +53,7 @@ export class MembersController {
   @Post()
   async create(@Body() createMembersDTO: CreateMembersDTO): Promise<Members> {
     const lastestMembers = await this.membersService.lastest();
-    let hn;
+    let hn: string;
     lastestMembers
       ? (hn = `HN-${padStart(
           Number(lastestMembers.hn.split('-')[1]) + 1,
@@ -76,7 +76,7 @@ export class MembersController {
   async update(
     @Param('hn') hn: string,
     @Body() createMembersDTO: CreateMembersDTO,
-  ) {
+  ): Promise<Members> {
     return await this.membersService
       .update(hn.toUpperCase(), createMembersDTO)
       .catch(err => {

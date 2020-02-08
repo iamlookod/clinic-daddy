@@ -21,7 +21,7 @@ export class MembersService {
   /**
    * Return a ReadMembersDTO object
    */
-  async getMembers(req) {
+  async datatable(req) {
     let query = {};
     let options = {};
     if (req.sort)
@@ -41,9 +41,8 @@ export class MembersService {
         ],
       };
 
-    const data = await this.membersModel.paginate(query, options);
+    let data = await this.membersModel.paginate(query, options);
 
-    console.log(data);
     return data;
   }
 

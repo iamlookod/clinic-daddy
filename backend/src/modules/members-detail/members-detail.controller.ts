@@ -55,7 +55,7 @@ export class MembersDetailController {
     @Body() createMembersDetailDTO: CreateMembersDetailDTO,
   ): Promise<MembersDetail> {
     const lastestMembers = await this.membersService.lastest();
-    let hn;
+    let hn: string;
     lastestMembers
       ? (hn = `HN-${padStart(
           Number(lastestMembers.hn.split('-')[1]) + 1,

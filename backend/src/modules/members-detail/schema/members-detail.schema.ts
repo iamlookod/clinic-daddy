@@ -8,11 +8,10 @@ import * as mongoosePaginate from 'mongoose-paginate-v2';
 export const MembersDetailSchema = new mongoose.Schema(
   {
     hn: { type: String, required: true },
-    name: { type: String, required: true },
-    address: String,
-    birtdate: Date,
-    disease: String,
-    allegric: String,
+    symb: String,
+    diag: String,
+    medicine: Array,
+    price: Number,
   },
   { timestamps: { createdAt: 'createdAt' } },
 ).plugin(mongoosePaginate);
