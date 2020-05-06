@@ -13,7 +13,7 @@ import { MedicinesModule } from './modules/medicines/medicines.module';
   imports: [
     MongooseModule.forRootAsync({
       useFactory: () => ({
-        uri: 'mongodb://127.0.0.1:27017/clinic',
+        uri: process.env.MONGODB_URI,
         useNewUrlParser: true,
         useFindAndModify: false,
       }),

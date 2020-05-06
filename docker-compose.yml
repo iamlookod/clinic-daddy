@@ -20,6 +20,6 @@ services:
       - mongo
     environment:
       - NODE_ENV=development
-      - MONGODB_URI=mongodb://mongo:27017/appdb
+      - MONGODB_URI=mongodb://mongo:27017/clinic
 volumes:
   data_koaapi:

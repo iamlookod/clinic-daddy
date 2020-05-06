@@ -1,0 +1,262 @@
+<nz-content>
+  <div nz-row>
+    <div nz-col nzSpan="24">
+      <nz-page-header nzTitle="ประวัติการรักษา"></nz-page-header>
+    </div>
+  </div>
+
+  <div nz-row>
+    <div nz-col nzSpan="24">
+      <nz-card>
+        <div nz-row>
+          <nz-descriptions [nzTitle]="member.hn">
+            <nz-descriptions-item nzTitle="ชื่อ-สกุล">{{
+              member.name
+            }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="ที่อยู่">{{
+              member.address
+            }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="วันเดือนปีเกิด">{{
+              displayBirtDate(member.birtdate)
+            }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="โรคประจำตัว">{{
+              member.disease
+            }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="แพ้ยา">
+              {{ member.allegric }}
+            </nz-descriptions-item>
+          </nz-descriptions>
+        </div>
+      </nz-card>
+    </div>
+  </div>
+
+  <div nz-row>
+    <div nz-col nzSpan="24">
+      <nz-card>
+        <div nz-row>
+          <div nz-col nzSpan="12" class="text-right">
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+              <input
+                type="text"
+                nz-input
+                placeholder="ค้นหา"
+                [(ngModel)]="searchValue"
+                (ngModelChange)="onSearchChange($event)"
+              />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+          </div>
+          <div nz-col nzSpan="12" class="text-right">
+            <button
+              nz-button
+              nzType="primary"
+              [nzSize]="size"
+              nzShape="round"
+              (click)="showModal()"
+            >
+              <i nz-icon nzType="plus-circle"></i>เพิ่มประวัติการรักษา
+            </button>
+            <!-- <button nz-button nzType="danger" [nzSize]="size" nzShape="round">
+                      <i nz-icon nzType="minus-circle"></i>ลบผู้ป่วย
+                    </button> -->
+          </div>
+        </div>
+        <nz-divider></nz-divider>
+        <nz-table
+          #rowSelectionTable
+          nzShowSizeChanger
+          [nzData]="memberData"
+          (nzPageSizeChange)="pageSizeChange($event)"
+          [nzSize]="middle"
+          [nzLoading]="isLoading"
+          [nzFrontPagination]="false"
+          [nzTotal]="pageTotal"
+          (nzPageIndexChange)="pageChange($event)"
+          (nzCurrentPageDataChange)="currentPageDataChange($event)"
+        >
+          <thead (nzSortChange)="onSort($event)" nzSingleSort>
+            <tr>
+              <th nzShowSort nzSortKey="createdAt">วันที่ตรวจ</th>
+              <th>อาการป่วย</th>
+              <th>ผลการวินิจฉัย</th>
+              <th>ยา</th>
+              <th>ราคา</th>
+              <th>บันทึกช่วยจำ</th>
+              <th>#</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of rowSelectionTable.data">
+              <td>{{ data.createdAt }}</td>
+              <td>{{ data.symb }}</td>
+              <td>{{ data.diag }}</td>
+              <td>{{ data.medicine }}</td>
+              <td>{{ data.price }}</td>
+              <td>{{ data.note }}</td>
+              <td>
+                <button
+                  nz-button
+                  nzType="primary"
+                  [nzSize]="size"
+                  nzShape="round"
+                  nzGhost
+                  (click)="showModal(data)"
+                >
+                  <i nz-icon nzType="edit"></i>แก้ไข
+                </button>
+                <!-- <nz-divider nzType="vertical"></nz-divider> -->
+                <button
+                  nz-button
+                  nzType="danger"
+                  [nzSize]="size"
+                  nzShape="round"
+                  nzGhost
+                  (click)="deleteMember(data.hn)"
+                >
+                  <i nz-icon nzType="delete"></i>ลบ
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <div class="search-box">
+            <input
+              type="text"
+              nz-input
+              placeholder="Search name"
+              [(ngModel)]="searchValue"
+            />
+            <button
+              nz-button
+              nzSize="small"
+              nzType="primary"
+              (click)="search()"
+              class="search-button"
+            >
+              Search
+            </button>
+            <button nz-button nzSize="small" (click)="reset()">Reset</button>
+          </div>
+        </nz-dropdown-menu>
+      </nz-card>
+    </div>
+  </div>
+</nz-content>
+
+<ng-template #titleModal>
+  <ng-container *ngIf="!this.form.get('_id').value; else elseTemplate">
+    <i nz-icon nzType="plus-circle"></i> เพิ่มข้อมูล
+  </ng-container>
+  <ng-template #elseTemplate>
+    <i nz-icon nzType="edit"></i> แก้ไขข้อมูล
+  </ng-template>
+</ng-template>
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="titleModal"
+  (nzOnCancel)="handleCancel()"
+  nzWidth="1080"
+>
+  <form
+    nz-form
+    [formGroup]="form"
+    (ngSubmit)="submitForm()"
+    nzLayout="vertical"
+  >
+    <input nz-input id="_id" formControlName="_id" type="hidden" />
+    <input
+      nz-input
+      id="hn"
+      formControlName="hn"
+      value="{{ member.hn }}"
+      type="hidden"
+    />
+
+    <div nz-row nzGutter="8">
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label nzFor="symb">อาการป่วย</nz-form-label>
+          <nz-form-control>
+            <textarea
+              id="symb"
+              formControlName="symb"
+              nz-input
+              rows="5"
+              placeholder="อาการป่วย"
+              nzRequired
+            ></textarea>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzFor="diag">ผลวินิจฉัย</nz-form-label>
+          <nz-form-control>
+            <textarea
+              id="diag"
+              formControlName="diag"
+              nz-input
+              rows="5"
+              placeholder="ผลวินิจฉัย"
+              nzRequired
+            ></textarea>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzFor="note">บันทึกช่วยจำ</nz-form-label>
+          <nz-form-control>
+            <textarea
+              id="note"
+              formControlName="note"
+              nz-input
+              rows="5"
+              placeholder="บันทึกช่วยจำ"
+              nzRequired
+            ></textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label nzFor="medicines">ยา</nz-form-label>
+          <nz-form-control nzErrorTip="ยา">
+            <input
+              nz-input
+              id="medicines"
+              formControlName="medicines"
+              placeholder="ยา"
+            />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzFor="price">ราคา</nz-form-label>
+          <nz-form-control nzErrorTip="ราคา">
+            <input
+              nz-input
+              id="price"
+              formControlName="price"
+              placeholder="ราคา"
+              nzSize="large"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="handleCancel()">
+      ยกเลิก
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="submitForm()"
+      [nzLoading]="isOkLoading"
+    >
+      ตกลง
+    </button>
+  </div>
+</nz-modal>

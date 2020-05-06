@@ -1,0 +1,105 @@
+<ng-progress #progressbar></ng-progress>
+<nz-layout class="app-layout">
+  <nz-sider
+    class="menu-sidebar"
+    nzCollapsible
+    nzWidth="256px"
+    nzBreakpoint="md"
+    [(nzCollapsed)]="isCollapsed"
+    [nzTrigger]="null"
+  >
+    <div class="sidebar-logo">
+      <a routerLink="/">
+        <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo" />
+        <h1>Clinic</h1>
+      </a>
+    </div>
+    <ul
+      nz-menu
+      nzTheme="dark"
+      nzMode="inline"
+      [nzInlineCollapsed]="isCollapsed"
+    >
+      <li
+        nz-menu-item
+        nz-tooltip
+        nzPlacement="right"
+        nzMatchRouter
+        nzTitle="Dashboard"
+        [nzSelected]="nzTitle === Dashboard"
+        routerLink="/welcome"
+      >
+        <i nz-icon nzType="dashboard"></i>
+        <span>แดชบอร์ด</span>
+      </li>
+      <li
+        nz-menu-item
+        nz-tooltip
+        nzPlacement="right"
+        nzMatchRouter
+        nzTitle="Members"
+        [nzSelected]="nzTitle === Members"
+        routerLink="/members"
+      >
+        <i nz-icon nzType="user"></i>
+        <span>ผู้ป่วย</span>
+      </li>
+      <li
+        nz-menu-item
+        nz-tooltip
+        nzPlacement="right"
+        nzMatchRouter
+        nzTitle="Members"
+        [nzSelected]="nzTitle === Members"
+        routerLink="/members-detail"
+      >
+        <i nz-icon nzType="container"></i>
+        <span>ประวัติการรักษา</span>
+      </li>
+      <nz-divider></nz-divider>
+      <li
+        nz-menu-item
+        nz-tooltip
+        nzPlacement="right"
+        nzMatchRouter
+        nzTitle="Members"
+        [nzSelected]="nzTitle === Members"
+        routerLink="/medicines"
+      >
+        <i nz-icon nzType="medicine-box"></i>
+        <span>ยา</span>
+      </li>
+      <!-- <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/welcome">แดชบอร์ด</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/members">ผู้ป่วย</a>
+          </li>
+        </ul>
+      </li>
+      <li nz-submenu nzOpen nzTitle="Form" nzIcon="form">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a>Basic Form</a>
+          </li>
+        </ul>
+      </li> -->
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <div class="app-header">
+        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+          <i
+            class="trigger"
+            nz-icon
+            [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+          ></i>
+        </span>
+      </div>
+    </nz-header>
+    <router-outlet></router-outlet>
+  </nz-layout>
+</nz-layout>
