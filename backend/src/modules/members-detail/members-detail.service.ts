@@ -4,7 +4,7 @@
 
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
-import { ReadMembersDetailDTO } from './dto/read-members=detail.dto';
+// import { ReadMembersDetailDTO } from './dto/read-members=detail.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { MembersDetail } from './interfaces/members-detail.interface';
 import { CreateMembersDetailDTO } from './dto/create-members-detail.dto';
@@ -19,10 +19,11 @@ export class MembersDetailService {
     private readonly membersDetailModel: Model<MembersDetail>,
   ) {}
 
-  /**
-   * Return a ReadMembersDTO object
-   */
-  async getMembers(req) {
+  findOne(_id: string): Promise<MembersDetail> {
+    return this.membersDetailModel.findOne({ _id }).exec();
+  }
+
+  async datatable(req) {
     let query = {};
     let options = {};
     if (req.sort)
@@ -42,50 +43,34 @@ export class MembersDetailService {
         ],
       };
 
-    const data = await this.membersDetailModel.paginate(query, options);
+    let data = await this.membersDetailModel.paginate(query, options);
 
-    console.log(data);
     return data;
   }
 
-  /**
-   * Example of saving db
-   */
   create(
-    createMembersDetailDto: CreateMembersDetailDTO,
+    createMembersDetailDTO: CreateMembersDetailDTO,
   ): Promise<MembersDetail> {
-    const createdMembers = new this.membersDetailModel(createMembersDetailDto);
-    return createdMembers.save();
-  }
-
-  findAll(): Promise<MembersDetail[]> {
-    return this.membersDetailModel.find().exec();
-  }
-
-  findOne(hn: string): Promise<MembersDetail> {
-    return this.membersDetailModel.findOne({ hn }).exec();
+    const createMembersDetail = new this.membersDetailModel(
+      createMembersDetailDTO,
+    );
+    return createMembersDetail.save();
   }
 
   async update(
-    hn: string,
-    createMembersDetailDto: CreateMembersDetailDTO,
+    _id: string,
+    createMembersDetailDTO: CreateMembersDetailDTO,
   ): Promise<MembersDetail> {
     const update = await this.membersDetailModel
-      .findOneAndUpdate({ hn }, createMembersDetailDto)
+      .findOneAndUpdate({ _id }, createMembersDetailDTO)
       .exec();
 
     if (update) {
-      return await this.findOne(hn);
+      return await this.findOne(_id);
     }
   }
 
-  delete(hn: string): Promise<Object> {
-    return this.membersDetailModel.deleteOne({ hn });
-  }
-
-  async lastest(): Promise<MembersDetail> {
-    return await this.membersDetailModel
-      .findOne({}, {}, { sort: { createdAt: -1 } })
-      .exec();
+  delete(_id: string): Promise<Object> {
+    return this.membersDetailModel.deleteOne({ _id });
   }
 }

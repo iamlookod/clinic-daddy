@@ -12,6 +12,7 @@ export const MembersDetailSchema = new mongoose.Schema(
     diag: String,
     medicine: Array,
     price: Number,
+    note: String,
   },
   { timestamps: { createdAt: 'createdAt' } },
 ).plugin(mongoosePaginate);
