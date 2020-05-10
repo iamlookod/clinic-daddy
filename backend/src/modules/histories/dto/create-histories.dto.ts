@@ -5,13 +5,11 @@
 /**
  * A data transfer object
  */
-export class CreateMembersDetailDTO {
-  
+export class CreateHistoriesDTO {
   readonly hn: string;
+  readonly symb: string;
   readonly diag: string;
   readonly medicine: string;
-  readonly note: string;
-  readonly price: string;
-  readonly symb: string;
+  readonly price: number;
   // more fields at this point
 }

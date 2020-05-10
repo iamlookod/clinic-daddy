@@ -5,7 +5,7 @@
     </div>
   </div>
 
-  <div nz-row>
+  <div nz-row *ngIf="member">
     <div nz-col nzSpan="24">
       <nz-card>
         <div nz-row>
@@ -31,25 +31,11 @@
     </div>
   </div>
 
-  <div nz-row>
+  <div nz-row *ngIf="memberData">
     <div nz-col nzSpan="24">
       <nz-card>
         <div nz-row>
-          <div nz-col nzSpan="12" class="text-right">
-            <nz-input-group [nzSuffix]="suffixIconSearch">
-              <input
-                type="text"
-                nz-input
-                placeholder="ค้นหา"
-                [(ngModel)]="searchValue"
-                (ngModelChange)="onSearchChange($event)"
-              />
-            </nz-input-group>
-            <ng-template #suffixIconSearch>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
-          </div>
-          <div nz-col nzSpan="12" class="text-right">
+          <div nz-col nzSpan="24" class="text-right">
             <button
               nz-button
               nzType="primary"
@@ -90,7 +76,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let data of rowSelectionTable.data">
-              <td>{{ data.createdAt }}</td>
+              <td>{{ displayFormatDate(data.createdAt) }}</td>
               <td>{{ data.symb }}</td>
               <td>{{ data.diag }}</td>
               <td>{{ data.medicine }}</td>
@@ -114,7 +100,7 @@
                   [nzSize]="size"
                   nzShape="round"
                   nzGhost
-                  (click)="deleteMember(data.hn)"
+                  (click)="deleteMember(data._id)"
                 >
                   <i nz-icon nzType="delete"></i>ลบ
                 </button>
@@ -145,6 +131,37 @@
       </nz-card>
     </div>
   </div>
+
+  <div nz-row *ngIf="historyData">
+    <div nz-col nzSpan="24">
+      <nz-card nzTitle="ประวัติเก่า">
+        
+        <nz-table #basicTable [nzData]="historyData">
+          <thead>
+            <tr>
+              <th>วันที่รับการตรวจ</th>
+              <th>อาการป่วย</th>
+              <th>ผลการวินิจฉัย</th>
+              <th>ยา</th>
+              <th>ราคา</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of basicTable.data">
+              <td>{{ data.last_update }}</td>
+              <td>{{ data.symp }}</td>
+              <td>{{ data.diag }}</td>
+              <td>{{ data.med }}</td>
+              <td>{{ data.price }}</td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
+    </div>
+  </div>
+
+  
+
 </nz-content>
 
 <ng-template #titleModal>
@@ -169,13 +186,6 @@
     nzLayout="vertical"
   >
     <input nz-input id="_id" formControlName="_id" type="hidden" />
-    <input
-      nz-input
-      id="hn"
-      formControlName="hn"
-      value="{{ member.hn }}"
-      type="hidden"
-    />
 
     <div nz-row nzGutter="8">
       <div nz-col nzSpan="12">
@@ -221,14 +231,16 @@
       </div>
       <div nz-col nzSpan="12">
         <nz-form-item>
-          <nz-form-label nzFor="medicines">ยา</nz-form-label>
-          <nz-form-control nzErrorTip="ยา">
-            <input
+          <nz-form-label nzFor="medicine">ยา</nz-form-label>
+          <nz-form-control>
+            <textarea
+              id="medicine"
+              formControlName="medicine"
               nz-input
-              id="medicines"
-              formControlName="medicines"
-              placeholder="ยา"
-            />
+              rows="5"
+              placeholder="บันทึกช่วยจำ"
+              nzRequired
+            ></textarea>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>

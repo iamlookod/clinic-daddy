@@ -53,19 +53,18 @@ export class MembersController {
   @Post()
   async create(@Body() createMembersDTO: CreateMembersDTO): Promise<Members> {
     const lastestMembers = await this.membersService.lastest();
-    let hn: string;
-    lastestMembers
-      ? (hn = `HN-${padStart(
+    const hn = lastestMembers
+      ? (`HN-${padStart(
           Number(lastestMembers.hn.split('-')[1]) + 1,
           6,
           0,
         )}`)
-      : (hn = 'HN-000001');
+      : 'HN-000001';
 
     return await this.membersService
       .create({
-        hn,
         ...createMembersDTO,
+        hn,
       })
       .catch(err => {
         throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);

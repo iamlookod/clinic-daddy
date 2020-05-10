@@ -9,9 +9,10 @@ export interface MembersDetail {
 
 export interface MembersDetailForm {
   _id: string;
+  hn: string;
   symb: string;
   diag: string;
-  medicines: Array<string>;
+  medicine: string;
   price: number;
   note: string;
 }

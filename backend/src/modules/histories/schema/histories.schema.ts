@@ -5,14 +5,16 @@
 import * as mongoose from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 
-export const MembersSchema = new mongoose.Schema(
+export const HistoriesSchema = new mongoose.Schema(
   {
-    hn: { type: String },
-    name: { type: String, required: true },
+    hn: String,
+    name: String,
     address: String,
-    birtdate: Date,
-    disease: String,
     allegric: String,
-  },
-  { timestamps: { createdAt: 'createdAt' } },
+    symp: String,
+    diag: String,
+    med: String,
+    price: String,
+    last_update: String,
+  }
 ).plugin(mongoosePaginate);

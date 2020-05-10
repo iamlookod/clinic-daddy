@@ -32,6 +32,7 @@ export class MembersDetailFormComponent implements OnInit {
   member;
   membersDetail;
   memberData = [];
+  historyData;
   pageTotal = 0;
   pageSize = 10;
   offset = 0;
@@ -46,8 +47,14 @@ export class MembersDetailFormComponent implements OnInit {
   isOkLoading = false;
 
   async getMembersDetail(query) {
-    if (this.hn)
+    if (this.hn) {
       this.member = await this.membersDetailFormService.getMembers(this.hn);
+    }
+
+    this.historyData = await this.membersDetailFormService.getHistory(this.member.name);
+
+    console.log(this.historyData);
+
     this.membersDetail = await this.membersDetailFormService.getMembersDetailForm(
       query
     );
@@ -57,9 +64,9 @@ export class MembersDetailFormComponent implements OnInit {
     this.isLoading = false;
   }
 
-  deleteMember(hn) {
+  deleteMember(_id) {
     this.membersDetailFormService
-      .delete(hn)
+      .delete(_id)
       .then(() => {
         this.getMembersDetail(this.query());
         this.createMessage("success", "ลบข้อมูลสำเร็จ");
@@ -115,7 +122,7 @@ export class MembersDetailFormComponent implements OnInit {
 
     if (!this.form.get("_id").value) {
       this.membersDetailFormService
-        .create(this.form.getRawValue())
+        .create({ ...this.form.getRawValue(), hn: this.hn })
         .then(result => {
           this.isVisible = false;
           this.isOkLoading = false;
@@ -125,7 +132,7 @@ export class MembersDetailFormComponent implements OnInit {
         .catch(() => this.createMessage("error", "ไม่สามารถบันทึกข้อมูล"));
     } else {
       this.membersDetailFormService
-        .update(this.form.getRawValue())
+        .update({ ...this.form.getRawValue(), hn: this.hn })
         .then(result => {
           this.isVisible = false;
           this.isOkLoading = false;
@@ -175,6 +182,10 @@ export class MembersDetailFormComponent implements OnInit {
     return this.membersDetailFormService.formatBirtDate(value);
   }
 
+  displayFormatDate(value: string) {
+    return this.membersDetailFormService.formatDate(value);
+  }
+
   ngOnInit() {
     this.form = this.fb.group({
       hn: [null],
@@ -187,7 +198,9 @@ export class MembersDetailFormComponent implements OnInit {
     });
 
     this.hn = this.route.snapshot.paramMap.get("hn");
+    this.searchValue = this.hn;
 
     this.getMembersDetail(this.query());
+
   }
 }
