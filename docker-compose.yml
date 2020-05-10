@@ -1,19 +1,20 @@
-version: "2"
-
-services:
+version: "3.3"
+services: 
   mongo:
     image: mongo:4.0
-    container_name: clinic-db
+    restart: always
+    container_name: mongodb
     volumes:
-      - "data_koaapi:/data/db"
+      - "data:/data/db"
     ports:
       - "27017:27017"
     command: --smallfiles
-
+    networks:
+      - clinic
   backend:
     build:
       context: ./backend
-    container_name: clinic-backend
+    container_name: backend
     ports:
       - "3001:3001"
     links:
@@ -21,5 +22,23 @@ services:
     environment:
       - NODE_ENV=development
       - MONGODB_URI=mongodb://mongo:27017/clinic
+    networks:
+      - clinic
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - "80:80"
+    links:
+      - backend
+    environment:
+      - NODE_ENV=development
+      - MONGODB_URI=http://backend:3001/
+    networks:
+      - clinic
 volumes:
-  data_koaapi:
+  data:
+
+networks:
+  clinic:
